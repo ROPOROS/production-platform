@@ -11,6 +11,8 @@ app.get('/', (req, res) => {
   res.status(200).json({ message: 'DevOps platform service running' });
 });
 
+res.status(500).json({ status: 'broken' });
+
 if (require.main === module) {
   app.listen(port, () => {
     console.log(`Service listening on port ${port}`);
