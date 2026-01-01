@@ -1,0 +1,30 @@
+groups:
+- name: devops-platform-slo
+  rules:
+  - alert: HighErrorRateFastBurn
+    expr: |
+      (
+        sum(rate(http_request_duration_seconds_count{status!="200"}[1m]))
+        /
+        sum(rate(http_request_duration_seconds_count[1m]))
+      ) > 0.01
+    for: 2m
+    labels:
+      severity: critical
+    annotations:
+      summary: "High error rate (fast burn)"
+      description: "Error rate >1% for 2 minutes. User impact likely."
+
+  - alert: HighErrorRateSlowBurn
+    expr: |
+      (
+        sum(rate(http_request_duration_seconds_count{status!="200"}[5m]))
+        /
+        sum(rate(http_request_duration_seconds_count[5m]))
+      ) > 0.005
+    for: 10m
+    labels:
+      severity: warning
+    annotations:
+      summary: "Elevated error rate (slow burn)"
+      description: "Error rate >0.5% for 10 minutes. Investigate."
